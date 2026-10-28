@@ -1,0 +1,81 @@
+{
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "tpl-breakfast-1",
+      "name": "燕麦牛奶早餐",
+      "mealType": "breakfast",
+      "note": "碳水+蛋白的常规组合",
+      "items": [
+        {
+          "foodId": "oats-raw",
+          "amountG": 50
+        },
+        {
+          "foodId": "milk-whole",
+          "amountG": 250
+        },
+        {
+          "foodId": "egg-boiled",
+          "amountG": 50
+        }
+      ]
+    },
+    {
+      "id": "tpl-lunch-1",
+      "name": "鸡胸米饭套餐",
+      "mealType": "lunch",
+      "note": "高蛋白午餐",
+      "items": [
+        {
+          "foodId": "chicken-breast-cooked",
+          "amountG": 150
+        },
+        {
+          "foodId": "rice-cooked",
+          "amountG": 150
+        },
+        {
+          "foodId": "broccoli-raw",
+          "amountG": 150
+        }
+      ]
+    },
+    {
+      "id": "tpl-dinner-1",
+      "name": "三文鱼蔬菜晚餐",
+      "mealType": "dinner",
+      "note": "脂肪偏高，注意当日剩余额度",
+      "items": [
+        {
+          "foodId": "salmon-raw",
+          "amountG": 120
+        },
+        {
+          "foodId": "sweetpotato-steamed",
+          "amountG": 150
+        },
+        {
+          "foodId": "spinach-raw",
+          "amountG": 150
+        }
+      ]
+    },
+    {
+      "id": "tpl-snack-1",
+      "name": "酸奶坚果加餐",
+      "mealType": "snack",
+      "note": "坚果按 15g 计，热量密度高",
+      "items": [
+        {
+          "foodId": "yogurt-plain",
+          "amountG": 150
+        },
+        {
+          "foodId": "almond",
+          "amountG": 15
+        }
+      ]
+    }
+  ]
+}

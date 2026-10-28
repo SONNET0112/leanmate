@@ -1,0 +1,756 @@
+[
+  {
+    "id": "rice-cooked",
+    "name": "米饭（熟）",
+    "aliases": [
+      "白米饭",
+      "米饭"
+    ],
+    "category": "主食",
+    "state": "cooked",
+    "nutritionPer100g": {
+      "caloriesKcal": 116,
+      "proteinG": 2.6,
+      "carbohydratesG": 25.9,
+      "fatG": 0.3
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "congee",
+    "name": "白粥",
+    "aliases": [
+      "大米粥",
+      "稀饭"
+    ],
+    "category": "主食",
+    "state": "cooked",
+    "nutritionPer100g": {
+      "caloriesKcal": 46,
+      "proteinG": 1.1,
+      "carbohydratesG": 9.9,
+      "fatG": 0.3
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "mantou",
+    "name": "馒头",
+    "aliases": [
+      "白馒头"
+    ],
+    "category": "主食",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 223,
+      "proteinG": 7.0,
+      "carbohydratesG": 47.0,
+      "fatG": 1.1
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "noodle-cooked",
+    "name": "面条（煮）",
+    "aliases": [
+      "煮面",
+      "挂面"
+    ],
+    "category": "主食",
+    "state": "cooked",
+    "nutritionPer100g": {
+      "caloriesKcal": 110,
+      "proteinG": 4.5,
+      "carbohydratesG": 22.0,
+      "fatG": 0.5
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "bread-wholewheat",
+    "name": "全麦面包",
+    "aliases": [
+      "吐司",
+      "面包"
+    ],
+    "category": "主食",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 247,
+      "proteinG": 13.0,
+      "carbohydratesG": 41.0,
+      "fatG": 3.4
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "oats-raw",
+    "name": "燕麦片（生）",
+    "aliases": [
+      "燕麦",
+      "麦片"
+    ],
+    "category": "主食",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 377,
+      "proteinG": 15.0,
+      "carbohydratesG": 66.9,
+      "fatG": 6.7
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "potato-raw",
+    "name": "土豆（生）",
+    "aliases": [
+      "马铃薯",
+      "洋芋"
+    ],
+    "category": "主食",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 77,
+      "proteinG": 2.0,
+      "carbohydratesG": 17.5,
+      "fatG": 0.1
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "sweetpotato-steamed",
+    "name": "红薯（蒸）",
+    "aliases": [
+      "地瓜",
+      "番薯"
+    ],
+    "category": "主食",
+    "state": "cooked",
+    "nutritionPer100g": {
+      "caloriesKcal": 90,
+      "proteinG": 1.6,
+      "carbohydratesG": 20.7,
+      "fatG": 0.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "corn-boiled",
+    "name": "玉米（煮）",
+    "aliases": [
+      "甜玉米",
+      "玉米"
+    ],
+    "category": "主食",
+    "state": "cooked",
+    "nutritionPer100g": {
+      "caloriesKcal": 96,
+      "proteinG": 3.4,
+      "carbohydratesG": 21.0,
+      "fatG": 1.5
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "egg-raw",
+    "name": "鸡蛋（生）",
+    "aliases": [
+      "蛋",
+      "鸡蛋"
+    ],
+    "category": "蛋白质",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 143,
+      "proteinG": 12.6,
+      "carbohydratesG": 0.7,
+      "fatG": 9.5
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "egg-boiled",
+    "name": "鸡蛋（水煮）",
+    "aliases": [
+      "水煮蛋",
+      "白煮蛋"
+    ],
+    "category": "蛋白质",
+    "state": "cooked",
+    "nutritionPer100g": {
+      "caloriesKcal": 155,
+      "proteinG": 12.6,
+      "carbohydratesG": 1.1,
+      "fatG": 10.6
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "chicken-breast-raw",
+    "name": "鸡胸肉（生）",
+    "aliases": [
+      "鸡胸",
+      "鸡脯肉"
+    ],
+    "category": "蛋白质",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 118,
+      "proteinG": 22.5,
+      "carbohydratesG": 0.0,
+      "fatG": 2.0
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "chicken-breast-cooked",
+    "name": "鸡胸肉（熟）",
+    "aliases": [
+      "煎鸡胸",
+      "熟鸡胸"
+    ],
+    "category": "蛋白质",
+    "state": "cooked",
+    "nutritionPer100g": {
+      "caloriesKcal": 165,
+      "proteinG": 31.0,
+      "carbohydratesG": 0.0,
+      "fatG": 3.6
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "chicken-thigh-raw",
+    "name": "鸡腿肉（去皮生）",
+    "aliases": [
+      "鸡腿"
+    ],
+    "category": "蛋白质",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 121,
+      "proteinG": 19.7,
+      "carbohydratesG": 0.0,
+      "fatG": 4.4
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "beef-lean-raw",
+    "name": "牛肉（瘦，生）",
+    "aliases": [
+      "牛肉",
+      "瘦牛肉"
+    ],
+    "category": "蛋白质",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 106,
+      "proteinG": 20.2,
+      "carbohydratesG": 1.2,
+      "fatG": 2.3
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "pork-loin-raw",
+    "name": "猪里脊（生）",
+    "aliases": [
+      "里脊",
+      "猪肉"
+    ],
+    "category": "蛋白质",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 155,
+      "proteinG": 20.2,
+      "carbohydratesG": 0.7,
+      "fatG": 7.9
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "salmon-raw",
+    "name": "三文鱼（生）",
+    "aliases": [
+      "鲑鱼"
+    ],
+    "category": "蛋白质",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 208,
+      "proteinG": 20.4,
+      "carbohydratesG": 0.0,
+      "fatG": 13.4
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "shrimp-raw",
+    "name": "虾（生）",
+    "aliases": [
+      "对虾",
+      "鲜虾"
+    ],
+    "category": "蛋白质",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 93,
+      "proteinG": 18.6,
+      "carbohydratesG": 2.8,
+      "fatG": 0.8
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "tofu-firm",
+    "name": "北豆腐",
+    "aliases": [
+      "豆腐",
+      "老豆腐"
+    ],
+    "category": "蛋白质",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 98,
+      "proteinG": 12.2,
+      "carbohydratesG": 2.0,
+      "fatG": 4.8
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "milk-whole",
+    "name": "牛奶（全脂）",
+    "aliases": [
+      "全脂牛奶",
+      "纯牛奶"
+    ],
+    "category": "乳制品",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 65,
+      "proteinG": 3.3,
+      "carbohydratesG": 4.9,
+      "fatG": 3.6
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "yogurt-plain",
+    "name": "无糖酸奶",
+    "aliases": [
+      "酸奶",
+      "原味酸奶"
+    ],
+    "category": "乳制品",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 72,
+      "proteinG": 3.8,
+      "carbohydratesG": 4.7,
+      "fatG": 3.6
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "soymilk",
+    "name": "豆浆（无糖）",
+    "aliases": [
+      "豆奶"
+    ],
+    "category": "乳制品",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 31,
+      "proteinG": 3.0,
+      "carbohydratesG": 1.2,
+      "fatG": 1.6
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "whey",
+    "name": "乳清蛋白粉",
+    "aliases": [
+      "蛋白粉"
+    ],
+    "category": "蛋白质",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 380,
+      "proteinG": 78.0,
+      "carbohydratesG": 8.0,
+      "fatG": 4.0
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "broccoli-raw",
+    "name": "西兰花",
+    "aliases": [
+      "绿花菜"
+    ],
+    "category": "蔬菜",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 34,
+      "proteinG": 2.8,
+      "carbohydratesG": 6.6,
+      "fatG": 0.4
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "spinach-raw",
+    "name": "菠菜",
+    "aliases": [
+      "菠菜叶"
+    ],
+    "category": "蔬菜",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 23,
+      "proteinG": 2.9,
+      "carbohydratesG": 3.6,
+      "fatG": 0.4
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "lettuce-raw",
+    "name": "生菜",
+    "aliases": [
+      "莴苣"
+    ],
+    "category": "蔬菜",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 15,
+      "proteinG": 1.4,
+      "carbohydratesG": 2.9,
+      "fatG": 0.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "tomato-raw",
+    "name": "番茄",
+    "aliases": [
+      "西红柿"
+    ],
+    "category": "蔬菜",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 18,
+      "proteinG": 0.9,
+      "carbohydratesG": 3.9,
+      "fatG": 0.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "cucumber-raw",
+    "name": "黄瓜",
+    "aliases": [
+      "青瓜"
+    ],
+    "category": "蔬菜",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 15,
+      "proteinG": 0.7,
+      "carbohydratesG": 3.6,
+      "fatG": 0.1
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "carrot-raw",
+    "name": "胡萝卜",
+    "aliases": [
+      "红萝卜"
+    ],
+    "category": "蔬菜",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 41,
+      "proteinG": 0.9,
+      "carbohydratesG": 9.6,
+      "fatG": 0.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "mushroom-raw",
+    "name": "香菇（鲜）",
+    "aliases": [
+      "蘑菇",
+      "冬菇"
+    ],
+    "category": "蔬菜",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 26,
+      "proteinG": 2.2,
+      "carbohydratesG": 5.2,
+      "fatG": 0.3
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "apple",
+    "name": "苹果",
+    "aliases": [
+      "苹果（带皮）"
+    ],
+    "category": "水果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 52,
+      "proteinG": 0.3,
+      "carbohydratesG": 13.8,
+      "fatG": 0.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "banana",
+    "name": "香蕉",
+    "aliases": [
+      "蕉"
+    ],
+    "category": "水果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 89,
+      "proteinG": 1.1,
+      "carbohydratesG": 22.8,
+      "fatG": 0.3
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "orange",
+    "name": "橙子",
+    "aliases": [
+      "甜橙",
+      "橙"
+    ],
+    "category": "水果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 47,
+      "proteinG": 0.9,
+      "carbohydratesG": 11.8,
+      "fatG": 0.1
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "blueberry",
+    "name": "蓝莓",
+    "aliases": [
+      "蓝梅"
+    ],
+    "category": "水果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 57,
+      "proteinG": 0.7,
+      "carbohydratesG": 14.5,
+      "fatG": 0.3
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "grape",
+    "name": "葡萄",
+    "aliases": [
+      "提子"
+    ],
+    "category": "水果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 69,
+      "proteinG": 0.7,
+      "carbohydratesG": 18.1,
+      "fatG": 0.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "watermelon",
+    "name": "西瓜",
+    "aliases": [
+      "瓜"
+    ],
+    "category": "水果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 30,
+      "proteinG": 0.6,
+      "carbohydratesG": 7.6,
+      "fatG": 0.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "almond",
+    "name": "巴旦木",
+    "aliases": [
+      "杏仁",
+      "扁桃仁"
+    ],
+    "category": "坚果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 579,
+      "proteinG": 21.2,
+      "carbohydratesG": 21.6,
+      "fatG": 49.9
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "walnut",
+    "name": "核桃",
+    "aliases": [
+      "核桃仁"
+    ],
+    "category": "坚果",
+    "state": "raw",
+    "nutritionPer100g": {
+      "caloriesKcal": 654,
+      "proteinG": 15.2,
+      "carbohydratesG": 13.7,
+      "fatG": 65.2
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "peanut-butter",
+    "name": "花生酱",
+    "aliases": [
+      "花生酱（无糖）"
+    ],
+    "category": "坚果",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 588,
+      "proteinG": 25.1,
+      "carbohydratesG": 20.0,
+      "fatG": 50.4
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "olive-oil",
+    "name": "橄榄油",
+    "aliases": [
+      "食用油",
+      "油"
+    ],
+    "category": "油脂",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 884,
+      "proteinG": 0.0,
+      "carbohydratesG": 0.0,
+      "fatG": 100.0
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "sugar",
+    "name": "白砂糖",
+    "aliases": [
+      "糖"
+    ],
+    "category": "调味",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 387,
+      "proteinG": 0.0,
+      "carbohydratesG": 100.0,
+      "fatG": 0.0
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "cola",
+    "name": "可乐",
+    "aliases": [
+      "碳酸饮料"
+    ],
+    "category": "饮料",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 42,
+      "proteinG": 0.0,
+      "carbohydratesG": 10.6,
+      "fatG": 0.0
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  },
+  {
+    "id": "coffee-latte",
+    "name": "拿铁（全脂奶）",
+    "aliases": [
+      "拿铁",
+      "咖啡"
+    ],
+    "category": "饮料",
+    "state": "ready_to_eat",
+    "nutritionPer100g": {
+      "caloriesKcal": 55,
+      "proteinG": 3.0,
+      "carbohydratesG": 5.0,
+      "fatG": 2.5
+    },
+    "source": "公开食物成分参考值（USDA FoodData Central / 中国食物成分表量级），录入时未逐条联网复核",
+    "sourceType": "estimated"
+  }
+]

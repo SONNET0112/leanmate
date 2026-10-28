@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-10-28",
+  "status": "published-basis",
+  "statusNote": "本版本目标基于公开发表的能量平衡公式与蛋白质摄入建议；参考视频中的运动时长-宏量营养素系数尚未核实，未采用。",
+  "bmr": {
+    "method": "Mifflin-St Jeor",
+    "source": "Mifflin MD, St Jeor ST, et al. A new predictive equation for resting energy expenditure in healthy individuals. Am J Clin Nutr. 1990;51(2):241-247.",
+    "formula": {
+      "male": "10*weightKg + 6.25*heightCm - 5*age + 5",
+      "female": "10*weightKg + 6.25*heightCm - 5*age - 161",
+      "other": "10*weightKg + 6.25*heightCm - 5*age - 78"
+    },
+    "note": "other 取男女常数平均值（5 与 -161 的均值 -78），属于工程折中，不是原始论文结论。"
+  },
+  "activityBands": [
+    {
+      "maxWeeklyExerciseHours": 0,
+      "factor": 1.2,
+      "label": "几乎不运动"
+    },
+    {
+      "maxWeeklyExerciseHours": 2,
+      "factor": 1.375,
+      "label": "轻度活动（每周 ≤2 小时）"
+    },
+    {
+      "maxWeeklyExerciseHours": 5,
+      "factor": 1.55,
+      "label": "中等活动（每周 2–5 小时）"
+    },
+    {
+      "maxWeeklyExerciseHours": 999,
+      "factor": 1.725,
+      "label": "高活动量（每周 >5 小时）"
+    }
+  ],
+  "activitySource": "常用活动系数（1.2/1.375/1.55/1.725），用于把 BMR 估算为 TDEE，属估算值。",
+  "deficitKcal": 450,
+  "deficitNote": "≈0.45 kg/周的理论脂肪减少速度，按 7700 kcal/kg 粗算，实际受依从性与水分波动影响。",
+  "calorieFloor": {
+    "male": 1500,
+    "female": 1200,
+    "other": 1350
+  },
+  "proteinGPerKg": 1.6,
+  "proteinSource": "Morton RW, et al. Br J Sports Med. 2018;52:376-384（减脂期 1.6 g/kg 为饱和剂量附近值）。",
+  "fatGPerKg": 0.8,
+  "fatMinPercentOfCalories": 20,
+  "videoDerivedCoefficients": {
+    "status": "pending",
+    "note": "项目中尚无已核实的视频转录或人工确认表格；不以任何猜测数值填充。核实后作为新规则版本（1.1.0）写入，旧目标保持可追溯。",
+    "values": []
+  }
+}
