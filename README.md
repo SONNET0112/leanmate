@@ -15,6 +15,16 @@ npm test           # 业务逻辑单元测试（vitest，77 条）
 npm run test:e2e   # 浏览器流程测试（playwright，13 条，含 5 种视口；首次需 npx playwright install chromium）
 ```
 
+## 线上版本（GitHub Pages）
+
+- 网址：**https://sonnet0112.github.io/leanmate/**
+- 免费托管在 GitHub Pages，纯静态、无后端，所有数据仍只存在使用者自己的浏览器 LocalStorage
+- 线上不接入 AI：`/api/ai/*` 只由本地 `vite dev` / `vite preview` 的中间件提供，线上请求会 404，面板会提示「AI 识别当前未启用」，手动搜索与「离线匹配」照常可用
+
+**如何更新**：改完代码直接 `git push origin main`，GitHub Actions（`.github/workflows/deploy.yml`）会自动跑测试 + 构建 + 部署，约 1 分钟生效。
+
+部署要点：`vite.config.ts` 里构建时 `base` 取 `/leanmate/`（可用 `GH_PAGES_BASE` 覆盖），构建结束会把 `index.html` 复制成 `404.html` 并写 `.nojekyll`，所以直接访问 `/diet`、`/plan` 或刷新子路由都能打开应用。
+
 ## AI 识别怎么配
 
 前端只请求同源的 `/api/ai/parse`，密钥由 Vite 中间件（`server/ai-middleware.mjs`）在进程环境里读取，不会进打包产物：
