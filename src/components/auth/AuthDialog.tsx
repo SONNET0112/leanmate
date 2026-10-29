@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { AlertCircle, Loader2, X } from "lucide-react";
 import { useAuth } from "../../modules/auth/AuthProvider";
 
@@ -19,7 +20,8 @@ export function AuthDialog({ open, onClose }: { open: boolean; onClose: () => vo
     }
   };
 
-  return (
+  // 挂到 body 上：侧栏是 sticky 堆叠上下文，留在里面会被主内容（AI 面板）盖住
+  return createPortal(
     <div className="fixed inset-0 z-50 grid place-items-center bg-[#1f2723]/35 p-4" role="dialog" aria-modal="true" aria-labelledby="auth-title">
       <div className="w-full max-w-sm rounded-3xl border border-line bg-surface p-5 shadow-[0_24px_60px_-30px_rgba(31,39,35,0.6)]">
         <div className="flex items-start justify-between">
@@ -89,6 +91,7 @@ export function AuthDialog({ open, onClose }: { open: boolean; onClose: () => vo
           {mode === "in" ? "还没有账号？注册" : "已有账号？去登录"}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
