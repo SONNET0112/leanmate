@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useAuth } from "../modules/auth/AuthProvider";
+import { backupLocal, decideSync, hasUserData, loadRemote, markMigrated, saveRemote } from "../modules/cloud/cloud.storage";
 import { calculateFoodNutrition } from "../modules/nutrition/nutrition.calculator";
 import { findFood } from "../modules/nutrition/nutrition.service";
 import type { Food, FoodState, NutritionTotals } from "../modules/nutrition/nutrition.types";
@@ -27,6 +29,10 @@ interface Store {
   data: AppData | null;
   today: string;
   storageError: string | null;
+  /** local = 未登录只看本机；syncing / synced / error 对应云端同步状态 */
+  syncState: "local" | "syncing" | "synced" | "error";
+  syncError: string | null;
+  retrySync(): void;
   createProfile(profile: Omit<UserProfile, "createdAt" | "updatedAt" | "id">): GoalComputation;
   updateProfile(profile: UserProfile): void;
   recomputeGoal(): GoalComputation | null;
@@ -49,9 +55,15 @@ interface Store {
 const StoreContext = createContext<Store | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
+  const { status: authStatus, user } = useAuth();
   const [data, setData] = useState<AppData | null>(null);
   const [storageError, setStorageError] = useState<string | null>(null);
+  const [syncState, setSyncState] = useState<"local" | "syncing" | "synced" | "error">("local");
+  const [syncError, setSyncError] = useState<string | null>(null);
   const ref = useRef<AppData | null>(null);
+  const userIdRef = useRef<string | null>(null);
+  const pushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pending = useRef<AppData | null>(null);
   const today = toISODate();
 
   useEffect(() => {
@@ -73,7 +85,73 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const localReady = data !== null;
+
+  useEffect(() => {
+    if (authStatus !== "authed" || !user) {
+      userIdRef.current = null;
+      setSyncState("local");
+      return;
+    }
+    if (!localReady) return;
+    userIdRef.current = user.id;
+    let alive = true;
+    setSyncState("syncing");
+    (async () => {
+      try {
+        const local = ref.current;
+        const remote = await loadRemote(user.id);
+        if (!alive) return;
+        const action = decideSync(local, remote);
+        if (action === "pull" && remote) {
+          // 云端优先：先把本地留一份备份，再切换过去，绝不用本地覆盖云端
+          if (local && hasUserData(local)) backupLocal(user.id, local);
+          ref.current = remote;
+          setData(remote);
+          await storage.save(remote);
+          markMigrated(user.id);
+        } else if (action === "push" && local) {
+          backupLocal(user.id, local);
+          await saveRemote(user.id, local);
+          markMigrated(user.id);
+        }
+        if (!alive) return;
+        setSyncState("synced");
+        setSyncError(null);
+      } catch (error) {
+        if (!alive) return;
+        setSyncState("error");
+        setSyncError(`${(error as Error).message}——本地数据没有改动，可稍后重试。`);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [authStatus, user, localReady]);
+
   const store = useMemo<Store>(() => {
+    const pushCloud = (next: AppData) => {
+      const uid = userIdRef.current;
+      if (!uid) return;
+      pending.current = next;
+      if (pushTimer.current) clearTimeout(pushTimer.current);
+      setSyncState("syncing");
+      pushTimer.current = setTimeout(() => {
+        const payload = pending.current;
+        const id = userIdRef.current;
+        if (!payload || !id) return;
+        void saveRemote(id, payload).then(
+          () => {
+            setSyncState("synced");
+            setSyncError(null);
+          },
+          (error: Error) => {
+            setSyncState("error");
+            setSyncError(`${error.message}——修改已存本机，可点重试同步。`);
+          },
+        );
+      }, 800);
+    };
     const apply = (next: AppData) => {
       ref.current = next;
       setData(next);
@@ -81,6 +159,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         () => setStorageError(storage.persistent ? null : "浏览器存储不可用，数据只保存在内存中。"),
         (error: Error) => setStorageError(error.message),
       );
+      pushCloud(next);
     };
     const mutate = (fn: (current: AppData) => AppData) => {
       const current = ref.current;
@@ -95,6 +174,24 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       data,
       today,
       storageError,
+      syncState,
+      syncError,
+      retrySync() {
+        const uid = userIdRef.current;
+        const current = ref.current;
+        if (!uid || !current) return;
+        setSyncState("syncing");
+        void saveRemote(uid, current).then(
+          () => {
+            setSyncState("synced");
+            setSyncError(null);
+          },
+          (error: Error) => {
+            setSyncState("error");
+            setSyncError(`${error.message}——本地数据没有丢，可稍后再试。`);
+          },
+        );
+      },
       createProfile(input) {
         const profile: UserProfile = { ...input, id: newId(), createdAt: nowISO(), updatedAt: nowISO() };
         const computed = computeNutritionGoal(profile, toISODate());
@@ -200,7 +297,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         void storage.clear();
       },
     };
-  }, [data, today, storageError]);
+  }, [data, today, storageError, syncState, syncError]);
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 }

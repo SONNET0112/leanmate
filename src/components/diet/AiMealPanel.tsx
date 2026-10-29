@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AlertCircle, Loader2, Send, Sparkles, Trash2, Wand2 } from "lucide-react";
-import { aiHealth, parseMealWithAi, scale } from "../../modules/ai/ai.client";
+import { scale } from "../../modules/ai/ai.client";
+import { useAiSettings } from "../../modules/ai/AiSettingsProvider";
 import { parseMealLocally } from "../../modules/ai/local-parser";
 import type { AiError, DraftFoodItem } from "../../modules/ai/ai.types";
 import { calculateFoodNutrition } from "../../modules/nutrition/nutrition.calculator";
@@ -88,22 +89,20 @@ export function AiMealPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<AiError | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
-  const [configured, setConfigured] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    aiHealth().then((health) => setConfigured(health.configured));
-  }, []);
+  const { ensure, parse } = useAiSettings();
 
   const runAi = async () => {
     if (text.trim().length < 2) {
       setError({ code: "BAD_TEXT", message: "请先描述吃了什么，例如「中午一碗米饭、一份青菜」" });
       return;
     }
+    // AI 未配置时不拦截页面，只弹一次配置窗口，其它功能照常
+    if (!ensure()) return;
     setBusy(true);
     setError(null);
     setNotice(null);
     try {
-      const parsed = await parseMealWithAi(text.trim());
+      const parsed = await parse(text.trim());
       setItems(parsed);
       setUnmatched([]);
       setNotice(`AI 识别出 ${parsed.length} 项，请核对后确认保存。`);
@@ -183,7 +182,7 @@ export function AiMealPanel({
             <button
               type="button"
               onClick={runAi}
-              disabled={busy || configured === false}
+              disabled={busy}
               aria-label="AI 识别"
               className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-deep text-white transition-colors hover:bg-[#3f5a48] disabled:opacity-50"
             >
@@ -239,12 +238,6 @@ export function AiMealPanel({
         </>
       )}
 
-      {configured === false ? (
-        <p className="mt-2 rounded-lg border border-[#f0e6cf] bg-[#fdf8ec] px-3 py-2 text-[11px] leading-relaxed text-[#7a6231]">
-          AI 识别当前未启用（线上版本未接入 AI 服务）。饮食记录、营养统计、体重和模板都不受影响：
-          可以直接点「离线匹配」按食物库填，或用上面的搜索框手动记录。
-        </p>
-      ) : null}
 
       {error ? (
         <div className="mt-2 rounded-lg border border-[#eed6d3] bg-[#fdf4f3] px-3 py-2 text-[12px] text-danger" role="alert">

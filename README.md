@@ -25,7 +25,22 @@ npm run test:e2e   # 浏览器流程测试（playwright，13 条，含 5 种视�
 
 部署要点：`vite.config.ts` 里构建时 `base` 取 `/leanmate/`（可用 `GH_PAGES_BASE` 覆盖），构建结束会把 `index.html` 复制成 `404.html` 并写 `.nojekyll`，所以直接访问 `/diet`、`/plan` 或刷新子路由都能打开应用。
 
-## AI 识别怎么配
+## 账号与云端同步（Supabase，可选）
+
+- 不配置 Supabase 时：网站照常运行，数据只存在本机浏览器（行为与之前一致）
+- 配置后：邮箱注册/登录，登录后整份数据（饮食、体重、目标、模板、任务）以一份 JSONB 快照同步到云端，RLS 保证只能读写自己的记录
+- 首次登录自动迁移本机数据：云端有数据以云端为准（本地先备份到 `leanmate.backup.<uid>`），云端为空则把本地推上去
+- 详细步骤（建表 SQL、邮箱验证、GitHub Secrets）：见 `docs/SUPABASE-SETUP.md`
+
+## AI 配置（按需）
+
+AI 变成「按需配置」：打开网站直接进主界面，只有点「AI 识别」且还没配置时才弹一次配置框，取消不影响任何其它功能。
+
+- 登录 + Supabase 已部署 `ai-proxy` 函数：密钥存在服务端表里（`user_ai_config`，RLS 无策略，只有 service_role 能读），前端只留模型名
+- 未登录 / 本机开发：密钥只留在当前会话内存里（**不写 localStorage**），通过请求头发给本地 Vite 中间件；也可以继续用 `.env.local` 的 `AI_*`
+- 密钥不会进构建产物（已验证：线上 bundle 中无 key、无 service_role）
+
+## AI 识别怎么配（本机开发）
 
 前端只请求同源的 `/api/ai/parse`，密钥由 Vite 中间件（`server/ai-middleware.mjs`）在进程环境里读取，不会进打包产物：
 

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Download, Pencil, Trash2, Upload } from "lucide-react";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { PageHeader } from "../components/layout/PageHeader";
+import { AccountCard } from "../components/auth/AccountCard";
+import { AiSettingsCard } from "../components/settings/AiSettingsCard";
 import { useActiveGoal, useStore } from "../app/store";
 import { PROFILE_LIMITS, validateProfileInput } from "../modules/plan/plan.service";
 import type { Sex, UserProfile } from "../modules/plan/plan.types";
@@ -350,10 +352,14 @@ export function ProfilePage() {
             ) : null}
           </section>
 
+          <AccountCard />
+
+          <AiSettingsCard />
+
           <section className="card p-5">
             <h2 className="text-[15px] font-medium">数据</h2>
             <p className="mt-1 text-[12px] leading-relaxed text-muted">
-              数据只保存在这台设备的浏览器里，不会自动同步到其它设备。换设备或清理浏览器数据会丢失，建议定期导出备份。
+              数据默认保存在这台设备的浏览器里；登录后还会同步到云端，换设备用同一个账号即可恢复。导出备份始终可用。
             </p>
             <div className="mt-3 grid grid-cols-3 gap-2">
               <button type="button" onClick={exportData} className="btn btn-ghost text-[13px]">

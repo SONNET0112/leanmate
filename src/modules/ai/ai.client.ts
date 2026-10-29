@@ -1,3 +1,4 @@
+import { aiRequestHeaders } from "./ai.settings";
 import { calculateFoodNutrition } from "../nutrition/nutrition.calculator";
 import { findFood } from "../nutrition/nutrition.service";
 import type { NutritionTotals } from "../nutrition/nutrition.types";
@@ -58,7 +59,7 @@ export async function parseMealWithAi(text: string, signal?: AbortSignal): Promi
   try {
     response = await fetch(`${import.meta.env.BASE_URL}api/ai/parse`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...aiRequestHeaders() },
       body: JSON.stringify({ text }),
       signal,
     });
@@ -70,8 +71,10 @@ export async function parseMealWithAi(text: string, signal?: AbortSignal): Promi
   if (!response.ok) {
     const body = await response.json().catch(() => null);
     const code = body?.error?.code;
+    const known = ["NOT_CONFIGURED", "TIMEOUT", "EMPTY", "BAD_TEXT", "UNAUTHORIZED", "QUOTA"] as const;
+    const picked = (known as readonly string[]).includes(code) ? code : "UPSTREAM";
     throw {
-      code: code === "NOT_CONFIGURED" || code === "TIMEOUT" || code === "EMPTY" || code === "BAD_TEXT" ? code : "UPSTREAM",
+      code: picked as AiError["code"],
       message: body?.error?.message || `AI 服务不可用（${response.status}）`,
     } as AiError;
   }

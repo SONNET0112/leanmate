@@ -10,14 +10,18 @@ const DEFAULTS = {
   model: "deepseek-flash",
 };
 
-export function aiConfig() {
-  const customBase = Boolean(process.env.AI_BASE_URL);
+export function aiConfig(headers = {}) {
+  // 用户在界面上填的密钥（仅本机会话）通过请求头传入，优先级高于环境变量，且不落盘
+  const headerKey = String(headers["x-ai-key"] ?? "").trim();
+  const headerBase = String(headers["x-ai-base"] ?? "").trim();
+  const headerModel = String(headers["x-ai-model"] ?? "").trim();
+  const customBase = Boolean(process.env.AI_BASE_URL || headerBase);
   // 指定了别的服务商时必须有专用 key，否则会拿 TokenRiver 的 key 去请求别家（必然 401）
-  const apiKey = process.env.AI_API_KEY || (customBase ? "" : process.env.TOKENRIVER_API_KEY) || "";
+  const apiKey = headerKey || process.env.AI_API_KEY || (customBase ? "" : process.env.TOKENRIVER_API_KEY) || "";
   return {
     apiKey,
-    baseUrl: (process.env.AI_BASE_URL || DEFAULTS.baseUrl).replace(/\/$/, ""),
-    model: process.env.AI_MODEL || DEFAULTS.model,
+    baseUrl: (headerBase || process.env.AI_BASE_URL || DEFAULTS.baseUrl).replace(/\/$/, ""),
+    model: headerModel || process.env.AI_MODEL || DEFAULTS.model,
     timeoutMs: Number(process.env.AI_TIMEOUT_MS || 45000),
   };
 }
@@ -112,7 +116,7 @@ function extractJson(text) {
 
 async function handleParse(req, res) {
   if (req.method !== "POST") return sendJson(res, 405, { error: { code: "METHOD", message: "只支持 POST" } });
-  const config = aiConfig();
+  const config = aiConfig(req.headers);
   if (!config.apiKey) {
     return sendJson(res, 503, {
       error: {
@@ -152,8 +156,16 @@ async function handleParse(req, res) {
 
     if (!upstream.ok) {
       const detail = await upstream.text().catch(() => "");
-      return sendJson(res, 502, {
-        error: { code: "UPSTREAM", message: `AI 服务返回 ${upstream.status}`, detail: detail.slice(0, 300) },
+      const mapped =
+        upstream.status === 401 || upstream.status === 403
+          ? { status: 401, code: "UNAUTHORIZED", message: "API Key 无效或没有权限，请在设置里更新" }
+          : upstream.status === 402 || upstream.status === 429
+            ? { status: 429, code: "QUOTA", message: "额度不足或请求过于频繁，请稍后再试" }
+            : upstream.status === 404
+              ? { status: 502, code: "UPSTREAM", message: "接口地址或模型名不正确" }
+              : { status: 502, code: "UPSTREAM", message: `AI 服务返回 ${upstream.status}` };
+      return sendJson(res, mapped.status, {
+        error: { code: mapped.code, message: mapped.message, detail: detail.slice(0, 300) },
       });
     }
 
@@ -182,7 +194,7 @@ export function createAiMiddleware() {
   return function aiMiddleware(req, res, next) {
     const url = (req.url || "").split("?")[0];
     if (url === "/api/ai/health") {
-      const config = aiConfig();
+      const config = aiConfig(req.headers);
       return sendJson(res, 200, { configured: Boolean(config.apiKey), model: config.model, baseUrl: config.baseUrl });
     }
     if (url === "/api/ai/parse") {

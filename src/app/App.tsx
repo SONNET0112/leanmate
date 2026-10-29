@@ -6,6 +6,8 @@ import { DietPage } from "../pages/DietPage";
 import { OnboardingPage } from "../pages/OnboardingPage";
 import { PlanPage } from "../pages/PlanPage";
 import { StoreProvider } from "./store";
+import { AuthProvider } from "../modules/auth/AuthProvider";
+import { AiSettingsProvider } from "../modules/ai/AiSettingsProvider";
 
 // 只有「我的」用 Recharts，按需加载，省掉首屏 400 kB 图表库
 const ProfilePage = lazy(() => import("../pages/ProfilePage").then((m) => ({ default: m.ProfilePage })));
@@ -15,7 +17,9 @@ const BASENAME = import.meta.env.BASE_URL.replace(/\/$/, "") || undefined;
 
 export function App() {
   return (
-    <StoreProvider>
+    <AuthProvider>
+      <StoreProvider>
+        <AiSettingsProvider>
       <BrowserRouter basename={BASENAME}>
         <Routes>
           <Route path="/onboarding" element={<OnboardingPage />} />
@@ -35,6 +39,8 @@ export function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-    </StoreProvider>
+        </AiSettingsProvider>
+      </StoreProvider>
+    </AuthProvider>
   );
 }

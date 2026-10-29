@@ -1,5 +1,6 @@
 import { ChartPie, Leaf, Target, UserRound, UtensilsCrossed } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { AccountCard } from "../auth/AccountCard";
 
 export const navItems = [
   { to: "/", label: "首页", hint: "今日总览", Icon: ChartPie },
@@ -86,6 +87,7 @@ export function SideNavigation() {
       </nav>
 
       <div className="mt-auto space-y-3">
+        <AccountCard compact />
         <div className="relative overflow-hidden rounded-3xl border border-[#dfe9d6] bg-gradient-to-br from-[#eaf2e2] to-[#f5f8ee] px-4 py-4">
           <p className="text-[12.5px] font-medium leading-relaxed text-primary-deep">
             今天也要加油呀！

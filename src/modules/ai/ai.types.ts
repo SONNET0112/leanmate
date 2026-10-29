@@ -32,6 +32,6 @@ export interface AiParseResponse {
 }
 
 export interface AiError {
-  code: "NOT_CONFIGURED" | "TIMEOUT" | "UPSTREAM" | "NETWORK" | "EMPTY" | "BAD_TEXT" | "UNKNOWN";
+  code: "NOT_CONFIGURED" | "TIMEOUT" | "UPSTREAM" | "NETWORK" | "EMPTY" | "BAD_TEXT" | "UNAUTHORIZED" | "QUOTA" | "UNKNOWN";
   message: string;
 }
