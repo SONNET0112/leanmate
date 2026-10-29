@@ -29,6 +29,18 @@ interface AiSettingsValue {
 const DEFAULTS = { baseUrl: "https://api.deepseek.com", model: "deepseek-flash" };
 const AiContext = createContext<AiSettingsValue | null>(null);
 
+/** 线上最常见的失败是 ai-proxy 函数还没部署，给可执行的提示而不是库的英文报错。 */
+function humanizeAiError(error: unknown, cloud: boolean): string {
+  const msg = (error as Error)?.message ?? "";
+  if (/Failed to send a request|not found|404|non-2xx/i.test(msg)) {
+    return "云端 AI 代理（ai-proxy）还没有部署：在 Supabase 完成部署后即可在线配置密钥，期间可手动搜索记录。";
+  }
+  if (!cloud && /无法连接本地 AI 代理/.test(msg)) {
+    return "当前环境没有可用的 AI 代理：登录后走云端代理，或在本地开发环境使用。";
+  }
+  return msg || "操作失败，请稍后重试";
+}
+
 async function callFunction(action: string, payload: Record<string, unknown> = {}) {
   if (!supabase) throw new Error("未配置 Supabase");
   const { data, error } = await supabase.functions.invoke("ai-proxy", { body: { action, ...payload } });
@@ -129,7 +141,7 @@ export function AiSettingsProvider({ children }: { children: ReactNode }) {
           setDialogOpen(false);
           return null;
         } catch (error) {
-          return (error as Error).message;
+          return humanizeAiError(error, true);
         }
       }
       setSessionKey(input);
@@ -149,7 +161,7 @@ export function AiSettingsProvider({ children }: { children: ReactNode }) {
           await callFunction("test", { ...input });
           return null;
         } catch (error) {
-          return (error as Error).message;
+          return humanizeAiError(error, true);
         }
       }
       try {
@@ -167,7 +179,7 @@ export function AiSettingsProvider({ children }: { children: ReactNode }) {
         const body = await res.json().catch(() => null);
         return body?.error?.message ?? `请求失败（${res.status}）`;
       } catch {
-        return "无法连接本地 AI 代理：请确认用 npm run dev / preview 启动";
+        return humanizeAiError(new Error("无法连接本地 AI 代理"), false);
       }
     },
     [cloud],
