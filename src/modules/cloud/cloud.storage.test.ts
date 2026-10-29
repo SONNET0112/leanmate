@@ -40,6 +40,15 @@ describe("decideSync", () => {
     expect(decideSync(withProfile(), null)).toBe("push");
   });
 
+  it("换账号且云端为空时重置，不能把上一个账号的数据推给新账号", () => {
+    expect(decideSync(withProfile(), null, { userId: "userB", lastUserId: "userA" })).toBe("reset");
+  });
+
+  it("同一账号登录（云端为空）仍然走迁移推送", () => {
+    expect(decideSync(withProfile(), null, { userId: "userA", lastUserId: "userA" })).toBe("push");
+    expect(decideSync(withProfile(), null, { userId: "userA", lastUserId: null })).toBe("push");
+  });
+
   it("两边都空时什么都不做", () => {
     expect(decideSync(emptyAppData(), null)).toBe("none");
     expect(decideSync(null, null)).toBe("none");

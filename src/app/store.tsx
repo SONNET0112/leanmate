@@ -1,6 +1,15 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useAuth } from "../modules/auth/AuthProvider";
-import { backupLocal, decideSync, hasUserData, loadRemote, markMigrated, saveRemote } from "../modules/cloud/cloud.storage";
+import {
+  backupLocal,
+  decideSync,
+  hasUserData,
+  loadRemote,
+  markMigrated,
+  readLastUser,
+  rememberUser,
+  saveRemote,
+} from "../modules/cloud/cloud.storage";
 import { calculateFoodNutrition } from "../modules/nutrition/nutrition.calculator";
 import { findFood } from "../modules/nutrition/nutrition.service";
 import type { Food, FoodState, NutritionTotals } from "../modules/nutrition/nutrition.types";
@@ -64,6 +73,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const userIdRef = useRef<string | null>(null);
   const pushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pending = useRef<AppData | null>(null);
+  /** 只有本会话成功对过云端之后才允许推送，避免把没核对过的本地数据盖上去 */
+  const adoptedFor = useRef<string | null>(null);
+  const clearPushTimer = () => {
+    if (pushTimer.current) clearTimeout(pushTimer.current);
+    pushTimer.current = null;
+    pending.current = null;
+  };
   const today = toISODate();
 
   useEffect(() => {
@@ -89,7 +105,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (authStatus !== "authed" || !user) {
+      clearPushTimer();
       userIdRef.current = null;
+      adoptedFor.current = null;
       setSyncState("local");
       return;
     }
@@ -102,7 +120,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         const local = ref.current;
         const remote = await loadRemote(user.id);
         if (!alive) return;
-        const action = decideSync(local, remote);
+        const action = decideSync(local, remote, { userId: user.id, lastUserId: readLastUser() });
+        if (action === "reset" && local) {
+          // 换了账号：先把上一个账号的数据备份到它自己的 key 下，再给新账号一个干净的起点
+          backupLocal(readLastUser() ?? user.id, local);
+          const blank = emptyAppData();
+          ref.current = blank;
+          setData(blank);
+          await storage.save(blank);
+        }
         if (action === "pull" && remote) {
           // 云端优先：先把本地留一份备份，再切换过去，绝不用本地覆盖云端
           if (local && hasUserData(local)) backupLocal(user.id, local);
@@ -116,6 +142,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
           markMigrated(user.id);
         }
         if (!alive) return;
+        adoptedFor.current = user.id;
+        rememberUser(user.id);
         setSyncState("synced");
         setSyncError(null);
       } catch (error) {
@@ -127,19 +155,21 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return () => {
       alive = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authStatus, user, localReady]);
 
   const store = useMemo<Store>(() => {
     const pushCloud = (next: AppData) => {
       const uid = userIdRef.current;
-      if (!uid) return;
+      if (!uid || adoptedFor.current !== uid) return;
       pending.current = next;
       if (pushTimer.current) clearTimeout(pushTimer.current);
       setSyncState("syncing");
       pushTimer.current = setTimeout(() => {
         const payload = pending.current;
         const id = userIdRef.current;
-        if (!payload || !id) return;
+        // 期间若切换了账号，这次推送直接作废，绝不写进别人的账号
+        if (!payload || !id || id !== uid || adoptedFor.current !== uid) return;
         void saveRemote(id, payload).then(
           () => {
             setSyncState("synced");

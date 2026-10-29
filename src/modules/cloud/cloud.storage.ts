@@ -5,9 +5,40 @@ import { supabase } from "./supabase";
 const TABLE = "leanmate_state";
 const BACKUP_PREFIX = "leanmate.backup.";
 const MIGRATED_PREFIX = "leanmate.migrated.";
+const LAST_USER_KEY = "leanmate.lastUser";
 
 /** 首次登录时的合并动作：云端有数据一律以云端为准，绝不用本地覆盖云端。 */
-export type SyncAction = "pull" | "push" | "none";
+export type SyncAction = "pull" | "push" | "reset" | "none";
+
+export interface SyncContext {
+  userId?: string;
+  /** 本机缓存上次属于哪个账号；换了账号就不能把旧账号的数据推进新账号 */
+  lastUserId?: string | null;
+}
+
+export function readLastUser(): string | null {
+  try {
+    return localStorage.getItem(LAST_USER_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function rememberUser(userId: string): void {
+  try {
+    localStorage.setItem(LAST_USER_KEY, userId);
+  } catch {
+    /* 忽略 */
+  }
+}
+
+export function forgetUser(): void {
+  try {
+    localStorage.removeItem(LAST_USER_KEY);
+  } catch {
+    /* 忽略 */
+  }
+}
 
 export function hasUserData(data: AppData | null): boolean {
   if (!data) return false;
@@ -19,9 +50,12 @@ export function hasUserData(data: AppData | null): boolean {
   );
 }
 
-export function decideSync(local: AppData | null, remote: AppData | null): SyncAction {
+export function decideSync(local: AppData | null, remote: AppData | null, ctx: SyncContext = {}): SyncAction {
   if (remote) return "pull";
-  return hasUserData(local) ? "push" : "none";
+  if (!hasUserData(local)) return "none";
+  // 换账号登录且云端为空：本机还留着上一个账号的缓存，绝不能把它推进新账号
+  if (ctx.lastUserId && ctx.userId && ctx.lastUserId !== ctx.userId) return "reset";
+  return "push";
 }
 
 export async function loadRemote(userId: string): Promise<AppData | null> {

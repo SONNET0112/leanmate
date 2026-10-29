@@ -72,7 +72,27 @@ GitHub Pages：仓库 Settings → Secrets and variables → **Actions** → New
 - 退出登录：只结束会话，云端数据不动；本机缓存保留（个人设备不会丢数据），换账号登录会被云端数据覆盖
 - 迁移标记：`leanmate.migrated.<uid>`，成功后才写
 
-## 7. 已知限制
+## 8. 本地真实验收（不碰你的云端项目）
+
+已在**本地跑起来的完整 Supabase 栈**（Postgres + GoTrue + PostgREST + Kong + RLS）上跑通全流程：
+
+```bash
+npx supabase start            # 需要 Docker 在运行
+npx supabase db reset --local # 应用 0001_leanmate_cloud.sql
+npx supabase status -o env    # 拿到 API_URL / PUBLISHABLE_KEY
+
+# 另开一个带 Supabase 配置的 dev server
+VITE_SUPABASE_URL=<API_URL> VITE_SUPABASE_ANON_KEY=<PUBLISHABLE_KEY> npx vite --port 5187
+
+# 跑验收脚本（15 条断言，会自己注册两个账号）
+VITE_SUPABASE_URL=<API_URL> VITE_SUPABASE_ANON_KEY=<PUBLISHABLE_KEY> APP_URL=http://localhost:5187/ node scripts/cloud-accept.mjs
+```
+
+脚本覆盖：邮箱注册 → 首次登录迁移本机数据 → 新增记录同步 → 读云端快照 → 刷新恢复会话 → 退出 → 重新登录恢复数据 →
+换第二个账号（回到空白起点、看不到别人的记录）→ RLS 越权读取/写入被拒 → 切回第一个账号数据仍在。
+
+## 9. 已知限制
 
 - 同步粒度是整份快照（最后写入者胜），多设备同时改同一条记录会互相覆盖，不做冲突合并
 - 未登录时只能本机使用
+- 换账号时本机缓存会重置（旧账号数据先备份到 `leanmate.backup.<旧uid>`），不继承到新账号

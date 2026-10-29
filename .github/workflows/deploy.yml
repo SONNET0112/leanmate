@@ -28,6 +28,9 @@ jobs:
       - run: npm run build
         env:
           GH_PAGES_BASE: /${{ github.event.repository.name }}/
+          # 公开配置：未设置 secret 时为空，站点自动以「仅本机」模式运行
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

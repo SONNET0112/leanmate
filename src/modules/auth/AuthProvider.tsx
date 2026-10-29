@@ -70,7 +70,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!supabase) return false;
     setBusy(true);
     setError(null);
-    const { data, error: err } = await supabase.auth.signUp({ email, password });
+    const { data, error: err } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}` },
+    });
     setBusy(false);
     if (err) {
       setError(friendly(err.message));
