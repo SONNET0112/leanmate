@@ -176,6 +176,8 @@ export function AiSettingsProvider({ children }: { children: ReactNode }) {
           body: JSON.stringify({ text: "鸡蛋" }),
         });
         if (res.ok) return null;
+        // 静态托管上根本没有 /api/ai/*，404/405 都表示「没有可用代理」，不要抛状态码给用户
+        if (res.status === 404 || res.status === 405) return humanizeAiError(new Error("无法连接本地 AI 代理"), false);
         const body = await res.json().catch(() => null);
         return body?.error?.message ?? `请求失败（${res.status}）`;
       } catch {

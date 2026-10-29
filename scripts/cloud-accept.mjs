@@ -7,6 +7,7 @@ const APP = process.env.APP_URL || "http://localhost:5187/";
 const stamp = Date.now();
 const A = { email: `a${stamp}@leanmate.test`, password: "Passw0rd!123" };
 const B = { email: `b${stamp}@leanmate.test`, password: "Passw0rd!123" };
+console.log(`测试账号（可在 Supabase Auth 里删除）：${A.email} / ${B.email}`);
 const results = [];
 const check = (name, ok, extra = "") => {
   results.push({ name, ok, extra });
