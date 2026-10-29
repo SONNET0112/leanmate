@@ -11,7 +11,9 @@ const DEFAULTS = {
 };
 
 export function aiConfig() {
-  const apiKey = process.env.AI_API_KEY || process.env.TOKENRIVER_API_KEY || "";
+  const customBase = Boolean(process.env.AI_BASE_URL);
+  // 指定了别的服务商时必须有专用 key，否则会拿 TokenRiver 的 key 去请求别家（必然 401）
+  const apiKey = process.env.AI_API_KEY || (customBase ? "" : process.env.TOKENRIVER_API_KEY) || "";
   return {
     apiKey,
     baseUrl: (process.env.AI_BASE_URL || DEFAULTS.baseUrl).replace(/\/$/, ""),

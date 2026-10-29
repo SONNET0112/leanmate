@@ -1,7 +1,7 @@
 import { copyFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { createAiMiddleware } from "./server/ai-middleware.mjs";
@@ -36,8 +36,16 @@ function pagesSpaFallback(): Plugin {
   };
 }
 
-export default defineConfig(({ command }) => ({
-  base: command === "build" ? PAGES_BASE : "/",
-  plugins: [react(), tailwindcss(), aiProxyPlugin(), pagesSpaFallback()],
-  test: { environment: "node", include: ["src/**/*.test.ts"] },
-}));
+export default defineConfig(({ command, mode }) => {
+  // .env.local 里的 AI_* 只注入到 Node 进程，供 server/ai-middleware.mjs 使用，不会进前端包
+  const fileEnv = loadEnv(mode, process.cwd(), "");
+  for (const key of ["AI_API_KEY", "AI_BASE_URL", "AI_MODEL", "AI_TIMEOUT_MS"]) {
+    if (fileEnv[key] && !process.env[key]) process.env[key] = fileEnv[key];
+  }
+
+  return {
+    base: command === "build" ? PAGES_BASE : "/",
+    plugins: [react(), tailwindcss(), aiProxyPlugin(), pagesSpaFallback()],
+    test: { environment: "node", include: ["src/**/*.test.ts"] },
+  };
+});
