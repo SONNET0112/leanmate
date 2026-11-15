@@ -89,7 +89,7 @@ export function AiMealPanel({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<AiError | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
-  const { ensure, parse } = useAiSettings();
+  const { ensure, parse, status, refresh } = useAiSettings();
 
   const runAi = async () => {
     if (text.trim().length < 2) {
@@ -182,7 +182,7 @@ export function AiMealPanel({
             <button
               type="button"
               onClick={runAi}
-              disabled={busy}
+              disabled={busy || status === "loading"}
               aria-label="AI 识别"
               className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-deep text-white transition-colors hover:bg-[#3f5a48] disabled:opacity-50"
             >
@@ -214,7 +214,7 @@ export function AiMealPanel({
           />
 
           <div className="mt-2 flex flex-wrap gap-2">
-            <button type="button" onClick={runAi} disabled={busy} className="btn btn-primary text-[13px]">
+            <button type="button" onClick={runAi} disabled={busy || status === "loading"} className="btn btn-primary text-[13px]">
               {busy ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />} AI 识别
             </button>
             <button type="button" onClick={runLocal} disabled={busy} className="btn btn-ghost text-[13px]">
@@ -255,6 +255,15 @@ export function AiMealPanel({
             </button>
           </div>
         </div>
+      ) : null}
+
+      {status === "error" ? (
+        <p className="mt-2 flex flex-wrap items-center gap-1.5 rounded-lg border border-[#eed6d3] bg-[#fdf4f3] px-3 py-2 text-[12px] text-danger" role="status">
+          <AlertCircle size={13} /> AI 配置读取失败（可能是网络问题），暂时无法识别。
+          <button type="button" onClick={() => void refresh()} className="underline">
+            重试
+          </button>
+        </p>
       ) : null}
 
       {notice ? <p className="mt-2 text-[12px] text-muted">{notice}</p> : null}

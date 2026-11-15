@@ -11,7 +11,7 @@ export function AiSettingsCard() {
       <div className="flex items-center justify-between">
         <h2 className="text-[15px] font-medium">AI 识别</h2>
         <span className={`text-[11px] ${status === "ready" ? "text-primary" : "text-muted"}`}>
-          {status === "loading" ? "检测中…" : status === "ready" ? `已配置 · ${model}` : "未配置"}
+          {status === "loading" ? "检测中…" : status === "ready" ? `已配置 · ${model}` : status === "error" ? "读取失败" : "未配置"}
         </span>
       </div>
       <p className="mt-1 text-[12px] leading-relaxed text-muted">

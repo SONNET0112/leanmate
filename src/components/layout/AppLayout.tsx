@@ -1,9 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useStore } from "../../app/store";
+import { AccountCard } from "../auth/AccountCard";
 import { BottomNavigation, SideNavigation } from "./Navigation";
 
 export function AppLayout() {
   const { data, storageError } = useStore();
+  const { pathname } = useLocation();
 
   if (!data) {
     return (
@@ -32,6 +34,12 @@ export function AppLayout() {
       <div className="relative z-10 mx-auto flex w-full max-w-[1180px] px-4 md:px-6 lg:gap-2">
         <SideNavigation />
         <div className="min-w-0 flex-1 pb-28 pt-5 lg:pb-12 lg:pt-7">
+          {/* 手机端没有侧栏：除「我的」页外，在页首给一个账号／登录入口 */}
+          {pathname !== "/profile" ? (
+            <div className="mb-3 lg:hidden">
+              <AccountCard compact />
+            </div>
+          ) : null}
           {storageError ? (
             <p
               role="alert"

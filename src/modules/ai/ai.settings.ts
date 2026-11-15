@@ -64,3 +64,18 @@ export function maskKey(key: string): string {
   if (key.length <= 8) return "****";
   return `${key.slice(0, 4)}…${key.slice(-4)}`;
 }
+
+export type AiStatus = "loading" | "ready" | "missing" | "error";
+
+/**
+ * 识别按钮的状态门：loading 时不能当成未配置（否则登录后立刻点会弹出空配置窗），
+ * error 也不该弹配置窗，交给界面提示重试。
+ */
+export type AiGate = "run" | "wait" | "configure" | "failed";
+
+export function aiGate(status: AiStatus): AiGate {
+  if (status === "ready") return "run";
+  if (status === "loading") return "wait";
+  if (status === "error") return "failed";
+  return "configure";
+}

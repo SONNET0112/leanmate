@@ -2,11 +2,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { supabase, supabaseConfigured } from "../cloud/supabase";
 import { useAuth } from "../auth/AuthProvider";
 import { AiConfigDialog, type AiConfigInput } from "../../components/settings/AiConfigDialog";
-import { clearMeta, readMeta, setSessionKey, writeMeta, type AiMode } from "./ai.settings";
+import { clearMeta, readMeta, setSessionKey, writeMeta, aiGate, type AiMode, type AiStatus } from "./ai.settings";
 import { parseMealWithAi, toDraftItems } from "./ai.client";
 import type { AiError, DraftFoodItem } from "./ai.types";
-
-type AiStatus = "loading" | "ready" | "missing";
 
 interface AiSettingsValue {
   status: AiStatus;
@@ -75,12 +73,15 @@ export function AiSettingsProvider({ children }: { children: ReactNode }) {
           setMode("cloud");
           return;
         }
+        setStatus("missing");
+        setMode("none");
+        return;
       } catch {
-        /* 云端不可用时按未配置处理，不阻塞页面 */
+        // 云端读配置失败 ≠ 没配置：单独标 error，避免把网络问题当成「未配置」弹窗
+        setStatus("error");
+        setMode("none");
+        return;
       }
-      setStatus("missing");
-      setMode("none");
-      return;
     }
     // 本机模式：先看会话内填过的密钥，再看 .env 里的中间件配置
     if (meta?.mode === "session" && meta.model) {
@@ -127,8 +128,10 @@ export function AiSettingsProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const ensure = useCallback(() => {
-    if (statusRef.current === "ready") return true;
-    openDialog();
+    const gate = aiGate(statusRef.current);
+    if (gate === "run") return true;
+    if (gate === "configure") openDialog();
+    // loading：等初始化完成；failed：界面提示重试。两种情况都不弹配置窗
     return false;
   }, [openDialog]);
 

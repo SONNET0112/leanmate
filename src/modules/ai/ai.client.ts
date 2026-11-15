@@ -54,6 +54,8 @@ export function scale(per100g: NutritionTotals, amountG: number): NutritionTotal
   };
 }
 
+// 相对路径：dev 走 /api/ai/*，子目录部署（如 /leanmate/）靠 BASE_URL 前缀命中
+
 export async function parseMealWithAi(text: string, signal?: AbortSignal): Promise<DraftFoodItem[]> {
   let response: Response;
   try {
