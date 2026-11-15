@@ -1,0 +1,34 @@
+# LeanMate —— Nginx + PHP-FPM 示例
+# 假设站点根目录 /var/www/leanmate（部署子目录也同样适用，只要 root 指对）
+server {
+    listen 80;
+    server_name your-domain.com;
+    root /var/www/leanmate;
+    index index.html;
+
+    # AI 代理入口
+    location = /api/ai/health { rewrite ^ /api/ai.php?action=health last; }
+    location = /api/ai/parse  { rewrite ^ /api/ai.php?action=parse last; }
+
+    # 密钥文件禁止直接访问
+    location = /api/config.php { deny all; }
+
+    # PHP（只有 api/ 下的脚本会被执行）
+    location ~ ^/api/.+\.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;   # 按实际 PHP 版本改
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_read_timeout 60s;
+    }
+
+    # 静态资源缓存
+    location ~* \.(js|css|woff2|png|jpg|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # 单页应用回退
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}

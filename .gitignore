@@ -8,3 +8,8 @@ dist-ssr
 test-results
 playwright-report
 .DS_Store
+deploy/index.html
+deploy/assets
+deploy/api/foods.json
+deploy/api/config.php
+leanmate-deploy.zip

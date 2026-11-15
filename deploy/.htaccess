@@ -1,0 +1,31 @@
+# LeanMate —— Apache 配置。放到站点根目录（子目录部署也适用）。
+Options -Indexes
+DirectoryIndex index.html
+
+# 入口文件与代理脚本禁止缓存，静态资源长缓存
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2|png|jpg|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# AI 密钥文件不允许通过浏览器访问（PHP include 不受影响）
+<Files "config.php">
+  Require all denied
+</Files>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # /api/ai/health, /api/ai/parse → api/ai.php?action=...；未知 /api/ai/* 也交给它返回 JSON 404
+  RewriteRule ^api/ai/(parse|health)/?$ api/ai.php?action=$1 [L,QSA]
+  RewriteRule ^api/ai(/.*)?$ api/ai.php [L,QSA]
+
+  # 单页应用回退：真实文件/目录直接用，其余交给 index.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [L]
+</IfModule>

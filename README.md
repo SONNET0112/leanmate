@@ -86,3 +86,17 @@ tests/e2e/      真实浏览器流程测试（含响应式矩阵）
 - AI 识别依赖外部模型：份量估算有不确定性（界面标 confidence 与依据），库外食物按模型估算并标「模型估算」，不能当作营养数据库。
 - AI 代理只在 `vite dev` / `vite preview` 里生效；纯静态托管时 `/api/ai/*` 需要自行部署等价服务。
 - 未实现后端、登录、跨设备同步、微信 / OpenClaw 接入。
+
+## 部署到自己的服务器（静态 + PHP）
+
+前端本身是静态产物，不需要用 PHP 重写：
+
+```bash
+npm run build:deploy          # → deploy/（index.html + assets/ + api/ai.php + .htaccess）
+cd deploy && zip -r ../leanmate-deploy.zip .   # 或者直接上传 deploy/ 里的内容
+```
+
+- 放到域名根目录：直接上传，Apache 用自带 `.htaccess`，Nginx 用 `nginx.conf.example`
+- 放到子目录：`GH_PAGES_BASE=/leanmate/ npm run build:deploy`
+- AI 识别：给 PHP 配 `AI_API_KEY` 环境变量，或写 `api/config.php`；`curl /api/ai/health` 返回 `configured:true` 即可
+- 细节见 `deploy/README.md`
